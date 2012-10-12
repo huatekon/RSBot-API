@@ -251,6 +251,20 @@ public class Prayer {
 				Task.sleep(15);
 			}
 			Task.sleep(100);
+			for (PrayerBook p : getQuick()) {
+				if (Arrays.binarySearch(prayers, p) < 0) {
+					if (Widgets.get(WIDGET_PRAYER, 42).getChild(p.getId()).interact("Deselect")) {
+						final Timer t = new Timer(500);
+						while (t.isRunning() && !p.isSetQuick()) {
+							Task.sleep(15);
+						}
+					} else {
+						Widgets.get(WIDGET_PRAYER, 43).interact("Confirm");
+						return false;
+					}
+				}
+			}
+			Arrays.sort(prayers);
 			for (PrayerBook p : prayers) {
 				if (p.isSetQuick()) {
 					continue;
@@ -263,20 +277,6 @@ public class Prayer {
 				} else {
 					Widgets.get(WIDGET_PRAYER, 43).interact("Confirm");
 					return false;
-				}
-			}
-			Arrays.sort(prayers);
-			for (PrayerBook p : getQuick()) {
-				if (Arrays.binarySearch(prayers, p) < 0) {
-					if (Widgets.get(WIDGET_PRAYER, 42).getChild(p.getId()).interact("Deselect")) {
-						final Timer t = new Timer(500);
-						while (t.isRunning() && !p.isSetQuick()) {
-							Task.sleep(15);
-						}
-					} else {
-						Widgets.get(WIDGET_PRAYER, 43).interact("Confirm");
-						return false;
-					}
 				}
 			}
 			return Widgets.get(WIDGET_PRAYER, 43).interact("Confirm");
